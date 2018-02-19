@@ -6,7 +6,14 @@ public class GunBehavior : MonoBehaviour
     public GameObject bulletModel;
     public GameObject gun;
     public float speed = 5.0f;
-    
+
+    public static GunMode currentGunMode = GunMode.shrink;
+    public enum GunMode
+    {
+        shrink,
+        grow
+    };
+
     void Update()
     {
         Vector3 target = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
@@ -16,15 +23,15 @@ public class GunBehavior : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject projectile = (GameObject)Instantiate(bulletModel, gun.transform.position, rotation);
-            projectile.AddComponent<BulletBehavior>().shrinkable = true;
+            GameObject projectile = Instantiate(bulletModel, gun.transform.position, rotation);
+            currentGunMode = GunMode.shrink;
             projectile.GetComponent<Rigidbody2D>().velocity = direction * speed;
         }
 
         if(Input.GetMouseButtonDown(1))
         {
-            GameObject projectile = (GameObject)Instantiate(bulletModel, gun.transform.position, rotation);
-            projectile.AddComponent<BulletBehavior>().shrinkable = false;
+            GameObject projectile = Instantiate(bulletModel, gun.transform.position, rotation);
+            currentGunMode = GunMode.grow;
             projectile.GetComponent<Rigidbody2D>().velocity = direction * speed;
         }
 
